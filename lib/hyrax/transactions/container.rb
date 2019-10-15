@@ -18,6 +18,7 @@ module Hyrax
     #
     # @see https://dry-rb.org/gems/dry-container/
     class Container
+      require 'hyrax/transactions/apply_change_set'
       require 'hyrax/transactions/create_work'
       require 'hyrax/transactions/destroy_work'
       require 'hyrax/transactions/steps/apply_collection_permission_template'
