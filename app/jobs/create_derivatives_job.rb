@@ -4,7 +4,12 @@ class CreateDerivativesJob < Hyrax::ApplicationJob
   # @param [FileSet] file_set
   # @param [String] file_id identifier for a Hydra::PCDM::File
   # @param [String, NilClass] filepath the cached file within the Hyrax.config.working_path
-  def perform(file_set, file_id, filepath = nil)
+  # @param use_valkyrie [Boolean] whether to use valkyrie support
+  def perform(file_set, file_id, filepath = nil, use_valkyrie: false)
+    if use_valkyrie
+      file_set = Wings::ActiveFedoraConverter.new(resource: file_set).convert
+    end
+
     return if file_set.video? && !Hyrax.config.enable_ffmpeg
     filename = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id, filepath)
 

@@ -21,15 +21,24 @@ RSpec.describe CreateDerivativesJob do
     before do
       allow(FileSet).to receive(:find).with(id).and_return(file_set)
       allow(file_set).to receive(:id).and_return(id)
-      allow(file_set).to receive(:mime_type).and_return('audio/x-wav')
+      allow_any_instance_of(FileSet).to receive(:mime_type).and_return('audio/x-wav')
     end
 
     context "with a file name" do
-      it 'calls create_derivatives and save on a file set' do
-        expect(Hydra::Derivatives::AudioDerivatives).to receive(:create)
-        expect(file_set).to receive(:reload)
-        expect(file_set).to receive(:update_index)
-        described_class.perform_now(file_set, file.id)
+      context "when use_valkyrie is false" do
+        it 'calls create_derivatives and save on a file set' do
+          expect(Hydra::Derivatives::AudioDerivatives).to receive(:create)
+          expect(file_set).to receive(:reload)
+          expect(file_set).to receive(:update_index)
+          described_class.perform_now(file_set, file.id)
+        end
+      end
+      context "when use_valkyrie is true" do
+        let(:resource) { valkyrie_create(:hyrax_file_set) }
+        it 'Vcalls create_derivatives and save on a file set' do
+          expect(Hydra::Derivatives::AudioDerivatives).to receive(:create)
+          described_class.perform_now(resource, file.id, use_valkyrie: true)
+        end
       end
     end
 
