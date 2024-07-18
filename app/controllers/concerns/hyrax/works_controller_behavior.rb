@@ -128,6 +128,25 @@ module Hyrax
       @form = presenter
     end
 
+    def structure
+      @form = presenter
+      @curation_concern = load_curation_concern
+      @change_set = ChangeSet.for(@curation_concern).prepopulate!
+      authorize! :structure, @change_set.resource
+      @logical_order = (Array(@change_set.apply_logical_structure).first || Structure.new)
+      StructureDecorator.decorate(@logical_order)
+      members = Hyrax.custom_queries.find_child_file_sets(resource: @change_set.resource)
+      @logical_order = WithProxyForObject.new(@logical_order, members)
+    end
+
+    def struct_manager
+      @change_set = ChangeSet.for(find_resource(params[:id]), change_set_param: change_set_param).prepopulate!
+      authorize! :structure, @change_set.resource
+      @logical_order = (Array(@change_set.logical_structure).first || Structure.new).decorate
+      members = Wayfinder.for(@change_set.resource).members_with_parents
+      @logical_order = WithProxyForObject.new(@logical_order, members)
+    end
+
     def inspect_work
       raise Hydra::AccessDenied unless current_ability.admin?
       presenter
