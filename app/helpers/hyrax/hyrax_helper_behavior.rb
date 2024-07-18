@@ -19,6 +19,7 @@ module Hyrax
     include Hyrax::WorkFormHelper
     include Hyrax::WorkflowsHelper
     include Hyrax::FacetsHelper
+    include Hyrax::StructureHelper
 
     ##
     # @return [Array<String>] the list of all user groups
