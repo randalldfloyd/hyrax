@@ -1,0 +1,14 @@
+<%= structure_page_header %>
+<div id="struct_manager_link">
+  <a href="struct_manager"
+    onclick="return confirm('Any unsaved changes will be lost. Are you sure?')">
+    Having trouble? Switch to the Old Structure Manager (Legacy Version)
+  </a>
+</div>
+<struct-manager
+  resource-id="<%= @change_set.id %>"
+  data-id="<%= @change_set.id %>"
+  data-class-name="<%= @change_set.model_name.plural %>"
+  data-singular-class-name="<%= @change_set.model_name.singular %>"
+  :structure="<%= @logical_order.to_json %>"
+  ></struct-manager>
