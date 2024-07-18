@@ -17,6 +17,8 @@ module ActionDispatch::Routing
             member do
               get :manifest
               get :file_manager
+              get :structure
+              get :struct_manager
               get :inspect_work
             end
           end

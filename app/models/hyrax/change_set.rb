@@ -15,6 +15,8 @@ module Hyrax
   def self.ChangeSet(resource_class)
     klass = (resource_class.to_s + "ChangeSet").safe_constantize || Hyrax::ChangeSet
     Class.new(klass) do
+      include Hyrax::LogicalStructureChangeSet
+
       (resource_class.fields - resource_class.reserved_attributes).each do |field|
         property field, default: nil
       end
@@ -42,6 +44,8 @@ module Hyrax
     #   change_set.sync
     #   monograph.title # => 'comet in moominland'
     #
+    include Hyrax::LogicalStructureChangeSet
+
     def self.for(resource)
       Hyrax::ChangeSet(resource.class).new(resource)
     end
