@@ -8,6 +8,7 @@ module Hyrax
     def generate_solr_document
       super.tap do |solr_doc|
         solr_doc['member_ids_ssim'] = object.member_ids
+        solr_doc['logical_structure_tesim'] = object.logical_structure.map(&:to_json)
         solr_doc['member_of_collections_ssim']    = object.member_of_collections.map(&:first_title)
         solr_doc['member_of_collection_ids_ssim'] = object.member_of_collections.map(&:id)
         solr_doc['generic_type_sim'] = ['Work']

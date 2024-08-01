@@ -37,6 +37,7 @@ module Hyrax
     attribute :alternate_ids, Valkyrie::Types::Array.of(Valkyrie::Types::ID)
     attribute :embargo_id,    Valkyrie::Types::Params::ID
     attribute :lease_id,      Valkyrie::Types::Params::ID
+    attribute :logical_structure,      Valkyrie::Types::Array.of(Hyrax::Structure)
 
     delegate :edit_groups, :edit_groups=,
              :edit_users,  :edit_users=,
