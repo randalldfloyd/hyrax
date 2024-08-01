@@ -22,6 +22,7 @@ module Hyrax
           solr_doc["#{Hyrax.config.admin_set_predicate.qname.last}_ssim"] = [resource.admin_set_id.to_s]
           solr_doc['member_of_collection_ids_ssim'] = resource.member_of_collection_ids.map(&:to_s)
           solr_doc['member_ids_ssim'] = resource.member_ids.map(&:to_s)
+          solr_doc['logical_structure_tesim'] = resource.logical_structure.map(&:to_json)
           solr_doc['depositor_ssim'] = [resource.depositor]
           solr_doc['depositor_tesim'] = [resource.depositor]
           solr_doc['hasRelatedMediaFragment_ssim'] = [resource.representative_id.to_s]

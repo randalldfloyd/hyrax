@@ -54,6 +54,7 @@ module Hyrax
         attribute :admin_set, Solr::Array, "admin_set_tesim"
         attribute :admin_set_id, Solr::Array, "admin_set_id_ssim"
         attribute :member_ids, Solr::Array, "member_ids_ssim"
+        attribute :logical_structure, Solr::Array, "logical_structure_tesim"
         attribute :member_of_collection_ids, Solr::Array, "member_of_collection_ids_ssim"
         attribute :member_of_collections, Solr::Array, "member_of_collections_ssim"
         attribute :description, Solr::Array, "description_tesim"

@@ -68,6 +68,12 @@ RSpec.describe ::SolrDocument, type: :model do
     its(:resource_type) { is_expected.to eq ['Image'] }
   end
 
+  describe "logical_structure" do
+    let(:attributes) { { 'logical_structure_tesim' => ['structure json'] } }
+
+    its(:logical_structure) { is_expected.to eq ['structure json'] }
+  end
+
   describe "thumbnail_path" do
     let(:attributes) { { 'thumbnail_path_ss' => ['/foo/bar'] } }
 
