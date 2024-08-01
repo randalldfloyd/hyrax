@@ -223,8 +223,50 @@ RSpec.describe Hyrax::IiifManifestPresenter, :clean_repo do
     end
   end
 
+  describe '#ranges' do
+    it('provides an empty structure rendering') { expect(presenter.ranges).to eq([]) }
+
+    context 'with structure in logical_structure' do
+      let(:work) { valkyrie_create(:monograph, uploaded_files: [FactoryBot.create(:uploaded_file), FactoryBot.create(:uploaded_file)]) }
+      let(:ranges) { presenter.ranges[0].ranges }
+      let(:structure) do
+        {
+          "label": "Top!",
+          "nodes": [
+            {
+              "label": "Chapter 1",
+              "nodes": [
+                {
+                  "proxy": work.member_ids[0]
+                }
+              ]
+            },
+            {
+              "label": "Chapter 2",
+              "nodes": [
+                {
+                  "proxy": work.member_ids[1]
+                }
+              ]
+            }
+          ]
+        }
+      end
+
+      before do
+        work.rendering_ids = work.member_ids
+        work.logical_structure = Hyrax::Structure.new(structure)
+        Hyrax.persister.save(resource: work)
+      end
+
+      it('renders ranges for the structure') { expect(ranges.count).to eq 2 }
+      it('renders structure node labels') { expect(ranges[1].structure.label[0]).to eq 'Chapter 2' }
+      it('renders structure node IDs') { expect(ranges[1].structure.nodes.first.proxy.first.id).to eq work.member_ids[1] }
+    end
+  end
+
   describe '#work_presenters' do
-    it('is empty') { expect(presenter.work_presenters).to be_empty } 
+    it('is empty') { expect(presenter.work_presenters).to be_empty }
 
     context 'when the work has member works' do
       let(:work) { build(:monograph, :with_member_works) }

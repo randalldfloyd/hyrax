@@ -21,12 +21,3 @@ attributes:
     predicate: http://id.loc.gov/vocabulary/relators/dpt
     index_keys:
       - "depositor_tesim"
-  logical_structure:
-    type: string
-    multiple: true
-    index_keys:
-      - "logical_structure_sim"
-      - "logical_structure_tesim"
-    form:
-      primary: false
-    predicate: http://vocabulary.samvera.org/ns#pcdmUse
