@@ -129,6 +129,17 @@ module Hyrax
       end.flatten
     end
 
+    def ranges
+      return [] if logical_structure.nil? or logical_structure.empty?
+      logical_structure&.map do |top_structure|
+        if top_structure.class == String
+          structure_hash = JSON.parse(top_structure, symbolize_names: true)
+          top_structure = Hyrax::Structure.new(structure_hash)
+        end
+        Hyrax::ManifestStructureBuilderService::TopStructure.new(top_structure, model)
+      end
+    end
+
     ##
     # @return [Boolean]
     def work?

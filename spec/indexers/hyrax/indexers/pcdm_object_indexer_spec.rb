@@ -58,6 +58,29 @@ RSpec.describe Hyrax::Indexers::PcdmObjectIndexer do
   describe '#to_solr' do
     let(:service) { described_class.new(resource: work) }
     subject(:solr_document) { service.to_solr }
+    let(:structure) do
+      {
+        "label": "Top!",
+        "nodes": [
+          {
+            "label": "Chapter 1",
+            "nodes": [
+              {
+                "proxy": '1'
+              }
+            ]
+          },
+          {
+            "label": "Chapter 2",
+            "nodes": [
+              {
+                "proxy": '2'
+              }
+            ]
+          }
+        ]
+      }
+    end
 
     let(:user) { create(:user) }
     let(:admin_set_title) { 'An Admin Set' }
@@ -65,6 +88,7 @@ RSpec.describe Hyrax::Indexers::PcdmObjectIndexer do
     let(:collection_title) { 'A Collection' }
     let(:col1) { FactoryBot.valkyrie_create(:hyrax_collection, title: [collection_title]) }
     let(:work) { FactoryBot.valkyrie_create(:hyrax_work, :with_member_works, member_of_collection_ids: [col1.id], admin_set_id: admin_set.id, depositor: user.email) }
+
 
     it 'includes attributes defined outside Hyrax::Schema include' do
       expect(solr_document.fetch('generic_type_si')).to eq 'Work'
@@ -76,6 +100,12 @@ RSpec.describe Hyrax::Indexers::PcdmObjectIndexer do
       expect(solr_document.fetch('member_of_collection_ids_ssim')).to match_array [col1.id]
       expect(solr_document.fetch('depositor_ssim')).to match_array [user.email]
       expect(solr_document.fetch('depositor_tesim')).to match_array [user.email]
+    end
+
+    it 'creates structure json from logical_structure' do
+      work.logical_structure = Hyrax::Structure.new(structure)
+      Hyrax.persister.save(resource: work)
+      expect(solr_document.fetch('logical_structure_tesim')).to eq work.logical_structure.map(&:to_json)
     end
 
     context 'when work is inactive' do
