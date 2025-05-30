@@ -63,3 +63,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-rescue'
 end
+
+gem "graphiql-rails", "~> 1.4", group: :development
+gem "graphql", "~> 1.13"
+
